@@ -7,6 +7,7 @@ ways. Each lives on its own git branch off `master` (the pristine scaffold).
 |---|---|
 | Layer-based | `structure/layered` |
 | Feature-based | `structure/feature-based` |
+| Feature-Sliced Design | `structure/fsd` |
 
 ```bash
 git switch structure/layered      # or structure/feature-based
@@ -120,6 +121,78 @@ Angular) nudge you there by default.
 
 Hybrid is normal and fine: feature folders for the domain, a thin `shared/`
 (or `components/ui`, `lib/`) layer underneath for the genuinely generic stuff.
+
+## Feature-Sliced Design (`structure/fsd`)
+
+The same app again, sliced into FSD's six layers. This is "feature-based, but
+'feature' was doing too many jobs so we split it into named tiers."
+
+### The layers (strict import direction: a layer may only import from layers *below* it)
+
+```
+src/
+  app/       providers.jsx  router.jsx  App.jsx          — wiring, global setup
+  pages/     feed/  post/  login/                        — one slice per route, thin
+  widgets/   navbar/  comments/                          — big self-contained UI blocks
+  features/  auth/  add-comment/                         — one user *action* each
+  entities/  session/  post/  comment/                   — business objects + their data
+  shared/    api/  ui/  lib/                             — generic, zero domain knowledge
+```
+
+Inside every slice, the same **segments**: `ui/` (components), `model/` (hooks,
+state, stores), `api/` (requests). `shared/` has the segments directly, no slices.
+
+### How the old "comments feature" split across layers
+
+| was (feature-based) | now (FSD) | why |
+|---|---|---|
+| `comments/api.js` `getComments` | `entities/comment/api/commentsApi.js` | reading the Comment object = entity concern |
+| `comments/useComments` (read) | `entities/comment/model/useComments.js` | entity read model; exposes `refetch()` |
+| `comments/CommentList` | `entities/comment/ui/CommentList.jsx` | how a Comment renders |
+| `comments/api.js` `addComment` | `features/add-comment/api/addCommentApi.js` | *writing* a comment = a user action |
+| `comments/CommentForm` | `features/add-comment/ui/CommentForm.jsx` | the action's UI |
+| `comments/CommentsSection` | `widgets/comments/CommentsSection.jsx` | stitches the entity + the feature into a block |
+| `auth/` (whole feature) | `entities/session` (state) + `features/auth` (the login form) | "who am I" vs "the act of logging in" |
+
+### What the split buys — and costs
+
+**Buys:**
+- `auth` stops being a vague "feature." `entities/session` = current-user state
+  (plumbing, everyone reads it); `features/auth` = just the login form. Different
+  roles, different layers, visible in the tree.
+- `entities/post` and `entities/comment` are reusable building blocks. A future
+  `edit-post` or `delete-comment` feature reuses the entity, adds only its action.
+- The dependency graph is now enforceable with one rule: "import only downward."
+  No feature→feature tangle to reason about.
+
+**Costs — visible right in this small app:**
+- **Split state.** Reading comments (`entities/comment`) and adding one
+  (`features/add-comment`) are now separate slices, so they can't share
+  useState. The widget re-glues them: it owns nothing, calls `refetch()` after a
+  successful add. In the flat feature-based branch one hook did both. This
+  re-gluing tax is the price of the split (a server-cache lib like TanStack Query
+  makes it a non-issue — the cache is the shared state).
+- **More files, more ceremony.** ~35 files for what layer-based did in ~20.
+- **Judgement calls multiply.** Is "navbar" a widget or app-level? Is the login
+  form a feature or does it belong to the session entity? FSD has answers, but
+  you have to learn them.
+- **`shared/` still a catch-all**, just a smaller one.
+
+### When FSD is worth it
+
+Large app, multiple teams, features added/removed often, and you want the folder
+tree to *be* the architecture diagram. On a 5-feature app it's overhead you're
+paying against future growth — fine as a deliberate bet, wrong as a default.
+
+### Compare the three branches
+
+| | files | "add a feature" touches | feature→feature | graph enforced by |
+|---|---|---|---|---|
+| `structure/layered` | fewest | 4–5 folders | uncontrolled | nothing |
+| `structure/feature-based` | middle | 1 folder + routes | allowed, one-way, by convention | barrels + discipline |
+| `structure/fsd` | most | 1 slice per layer touched | banned; go through a lower layer | one rule: import downward |
+
+---
 
 ## Next questions this raises
 

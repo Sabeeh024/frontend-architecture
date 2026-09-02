@@ -1,0 +1,30 @@
+import { useCallback, useEffect, useState } from 'react'
+import { getComments, addComment } from './api'
+
+export function useComments(postId) {
+  const [comments, setComments] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let alive = true
+    getComments(postId).then((data) => {
+      if (alive) {
+        setComments(data)
+        setLoading(false)
+      }
+    })
+    return () => {
+      alive = false
+    }
+  }, [postId])
+
+  const add = useCallback(
+    async ({ body, authorId }) => {
+      const created = await addComment(postId, { body, authorId })
+      setComments((cs) => [...cs, created])
+    },
+    [postId],
+  )
+
+  return { comments, loading, add }
+}

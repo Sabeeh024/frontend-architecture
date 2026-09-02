@@ -1,22 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useAsync } from '../../shared/lib/useAsync'
 import { getPosts } from './api'
 
+// Thin domain wrapper over the headless useAsync.
+// Returns { status: 'pending'|'success'|'error', data, error, reload }.
 export function usePosts() {
-  const [posts, setPosts] = useState([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    let alive = true
-    getPosts().then((data) => {
-      if (alive) {
-        setPosts(data)
-        setLoading(false)
-      }
-    })
-    return () => {
-      alive = false
-    }
-  }, [])
-
-  return { posts, loading }
+  return useAsync(() => getPosts(), [])
 }

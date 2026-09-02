@@ -1,14 +1,21 @@
 import { usePosts } from './usePosts'
-import { PostCard } from './PostCard'
-import { Spinner } from '../../shared/ui/Spinner'
+import { PostList } from './PostList'
+import { Async } from '../../shared/ui/Async'
 
+// Container ("smart"): owns the data, delegates every rendering decision.
+// The pending/error/empty ladder lives in <Async>, not here.
 export function FeedPage() {
-  const { posts, loading } = usePosts()
-  if (loading) return <Spinner label="Loading feed…" />
+  const posts = usePosts()
   return (
-    <div className="feed">
+    <>
       <h1>Feed</h1>
-      {posts.map((p) => <PostCard key={p.id} post={p} />)}
-    </div>
+      <Async
+        state={posts}
+        loading={<p className="spinner">Loading feed…</p>}
+        empty={<p className="muted">No posts yet.</p>}
+      >
+        {(data) => <PostList posts={data} />}
+      </Async>
+    </>
   )
 }

@@ -1,30 +1,17 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useAsync } from '../../shared/lib/useAsync'
 import { getComments, addComment } from './api'
 
 export function useComments(postId) {
-  const [comments, setComments] = useState([])
-  const [loading, setLoading] = useState(true)
+  const query = useAsync(() => getComments(postId), [postId])
 
-  useEffect(() => {
-    let alive = true
-    getComments(postId).then((data) => {
-      if (alive) {
-        setComments(data)
-        setLoading(false)
-      }
-    })
-    return () => {
-      alive = false
-    }
-  }, [postId])
+  async function add({ body, authorId }) {
+    await addComment(postId, { body, authorId })
+    query.reload()
+  }
 
-  const add = useCallback(
-    async ({ body, authorId }) => {
-      const created = await addComment(postId, { body, authorId })
-      setComments((cs) => [...cs, created])
-    },
-    [postId],
-  )
-
-  return { comments, loading, add }
+  return {
+    comments: query.data ?? [],
+    loading: query.status === 'pending',
+    add,
+  }
 }

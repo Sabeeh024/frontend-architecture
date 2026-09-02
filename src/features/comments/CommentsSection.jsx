@@ -1,16 +1,16 @@
-import { useComments } from './useComments'
-import { CommentList } from './CommentList'
-import { CommentForm } from './CommentForm'
-import { Spinner } from '../../shared/ui/Spinner'
+import { Comments } from './ui/Comments'
 
-// Composite the posts feature drops in without knowing how comments work.
+// Default composition the posts feature drops in. Because <Comments> is a
+// compound component, a different screen could arrange the same parts
+// differently (count in a header, form above the list) without new props.
 export function CommentsSection({ postId }) {
-  const { comments, loading, add } = useComments(postId)
   return (
-    <section className="comments">
-      <h2>Comments</h2>
-      {loading ? <Spinner label="Loading comments…" /> : <CommentList comments={comments} />}
-      <CommentForm onSubmit={add} />
-    </section>
+    <Comments postId={postId}>
+      <section className="comments">
+        <h2>Comments (<Comments.Count />)</h2>
+        <Comments.List />
+        <Comments.Form />
+      </section>
+    </Comments>
   )
 }

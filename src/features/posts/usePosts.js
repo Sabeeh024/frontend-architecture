@@ -1,8 +1,8 @@
-import { useAsync } from '../../shared/lib/useAsync'
+import { useQuery } from '@tanstack/react-query'
 import { getPosts } from './api'
 
-// Thin domain wrapper over the headless useAsync.
-// Returns { status: 'pending'|'success'|'error', data, error, reload }.
+// Same 2-line shape as the useAsync version — but now the result is cached,
+// deduped, and shared across every component that asks for ['posts'].
 export function usePosts() {
-  return useAsync(() => getPosts(), [])
+  return useQuery({ queryKey: ['posts'], queryFn: getPosts })
 }

@@ -40,7 +40,7 @@ textarea, input { font: inherit; padding: 8px; border: 1px solid var(--border); 
 .login { display: grid; gap: 12px; max-width: 320px; }
 .spinner { color: var(--muted); }
 
-.request-meter { position: fixed; right: 12px; bottom: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 12px; color: var(--muted); box-shadow: 0 4px 12px rgba(0,0,0,.12); }
+.request-meter { position: fixed; left: 12px; bottom: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 12px; color: var(--muted); box-shadow: 0 4px 12px rgba(0,0,0,.12); }
 .request-meter strong { color: var(--accent); font-size: 15px; }
 .request-meter ul { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 2px; }
 .request-meter code { font-size: 11px; }

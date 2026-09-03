@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../features/auth'
 import { Avatar } from '../shared/ui/Avatar'
 import { Button } from '../shared/ui/Button'
+import { RequestMeter } from '../shared/ui/RequestMeter'
 
 export function AppLayout({ children }) {
   const { user, logout } = useAuth()
@@ -21,6 +22,7 @@ export function AppLayout({ children }) {
         </nav>
       </header>
       <main>{children}</main>
+      <RequestMeter />
     </div>
   )
 }

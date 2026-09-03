@@ -7,5 +7,5 @@ export function login(name) {
     const user = { id: `u${db.users.length + 1}`, name }
     db.users.push(user)
     return user
-  })
+  }, 'POST /login')
 }

@@ -20,7 +20,18 @@ const db = {
 let seq = 100
 const nextId = (prefix) => `${prefix}${seq++}`
 
-export function fake(resolver) {
+// --- request instrumentation (topic 03: makes the cost of re-fetching visible)
+const listeners = new Set()
+export const requestLog = { count: 0, byLabel: {} }
+export function onRequest(fn) {
+  listeners.add(fn)
+  return () => listeners.delete(fn)
+}
+
+export function fake(resolver, label = 'request') {
+  requestLog.count += 1
+  requestLog.byLabel[label] = (requestLog.byLabel[label] ?? 0) + 1
+  listeners.forEach((fn) => fn({ ...requestLog }))
   return new Promise((resolve) => {
     setTimeout(() => resolve(resolver()), LATENCY)
   })

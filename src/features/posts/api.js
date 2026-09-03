@@ -6,12 +6,12 @@ const withAuthor = (post) => ({
 })
 
 export function getPosts() {
-  return fake(() => db.posts.map(withAuthor))
+  return fake(() => db.posts.map(withAuthor), 'GET /posts')
 }
 
 export function getPost(id) {
   return fake(() => {
     const post = db.posts.find((p) => p.id === id)
     return post ? withAuthor(post) : null
-  })
+  }, `GET /posts/${id}`)
 }

@@ -6,7 +6,10 @@ const withAuthor = (c) => ({
 })
 
 export function getComments(postId) {
-  return fake(() => db.comments.filter((c) => c.postId === postId).map(withAuthor))
+  return fake(
+    () => db.comments.filter((c) => c.postId === postId).map(withAuthor),
+    `GET /posts/${postId}/comments`,
+  )
 }
 
 export function addComment(postId, { body, authorId }) {
@@ -14,5 +17,5 @@ export function addComment(postId, { body, authorId }) {
     const comment = { id: nextId('c'), postId, authorId, body, createdAt: new Date().toISOString() }
     db.comments.push(comment)
     return withAuthor(comment)
-  })
+  }, `POST /posts/${postId}/comments`)
 }

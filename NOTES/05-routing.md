@@ -66,10 +66,14 @@ No `try/catch` in `PostPage`, no per-screen error state. A loader that does
 ## 3. Loaders — the route owns its data
 
 ```js
+// loadQuery = queryClient.query({ ...opts, staleTime: 'static' })
+//   -> return cached data on a hit, fetch on a miss. (query() is v5's unified
+//      imperative API; ensureQueryData / fetchQuery / prefetchQuery are now
+//      deprecated and removed next major.)
 const postLoader = ({ params }) =>
   Promise.all([
-    queryClient.ensureQueryData(postQuery(params.id)),
-    queryClient.ensureQueryData(commentsQuery(params.id)),   // parallel!
+    loadQuery(postQuery(params.id)),
+    loadQuery(commentsQuery(params.id)),   // parallel!
   ]).then(([post]) => post)
 ```
 
@@ -80,10 +84,10 @@ What changes:
 | component mounts → `useEffect`/`useQuery` fires → spinner → data | data fetched **before** the component renders; no spinner on navigation |
 | `PostPage` renders → `CommentsSection` mounts → *then* comments fetch (**waterfall**) | post + comments fire **in parallel** in the loader |
 | loading state in every screen | `useNavigation().state === 'loading'` → one global progress bar |
-| back button = refetch + re-flash | loader hits warm cache (`ensureQueryData`), instant |
+| back button = refetch + re-flash | loader hits warm cache, instant |
 
-**Loaders + React Query together, not instead:** the loader calls
-`ensureQueryData` (prime the cache); the component still calls `useQuery` with
+**Loaders + React Query together, not instead:** the loader primes the cache
+(`queryClient.query(...)`); the component still calls `useQuery` with
 the *same key* (subscribe, get updates, refetch-on-stale, mutations/invalidation
 from topic 03). `features/*/queries.js` holds the one shared definition so the
 key can't drift.

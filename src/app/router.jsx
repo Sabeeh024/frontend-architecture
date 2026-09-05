@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom'
-import { loadQuery } from './queryClient'
+import { loadQuery, prefetchQuery } from './queryClient'
 import { RootLayout } from './RootLayout'
 import { RouteError } from './RouteError'
 import { requireAuth } from './routeGuards'
@@ -7,15 +7,16 @@ import { postsQuery, postQuery } from '../features/posts/queries'
 import { commentsQuery } from '../features/comments/queries'
 
 // Loaders live in the app layer: glue between the router, the feature query
-// definitions, and the queryClient. loadQuery returns cached data on a hit and
-// fetches on a miss, so a loader is cheap on repeat visits.
+// definitions, and the queryClient.
 const feedLoader = () => loadQuery(postsQuery())
 
-const postLoader = ({ params }) =>
-  Promise.all([
-    loadQuery(postQuery(params.id)),
-    loadQuery(commentsQuery(params.id)),
-  ]).then(([post]) => post)
+const postLoader = ({ params }) => {
+  // comments = secondary: start the fetch now (no post->comments waterfall)
+  // but don't make the navigation wait on it, or fail if it errors.
+  prefetchQuery(commentsQuery(params.id))
+  // post = critical: the page is meaningless without it, so block on it.
+  return loadQuery(postQuery(params.id))
+}
 
 // Each page is only imported through import() -> its own JS chunk.
 export const router = createBrowserRouter([

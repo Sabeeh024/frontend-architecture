@@ -1,29 +1,13 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { QueryClientProvider } from '@tanstack/react-query'
+import { RouterProvider } from 'react-router-dom'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { AuthProvider, LoginPage } from '../features/auth'
-import { FeedPage, PostPage } from '../features/posts'
-import { AppLayout } from './AppLayout'
-import { ThemeProvider } from './theme/ThemeProvider'
-import { queryClient } from './queryClient'
+import { Providers } from './providers'
+import { router } from './router'
 
 export default function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <BrowserRouter>
-          <AuthProvider>
-            <AppLayout>
-              <Routes>
-                <Route path="/" element={<FeedPage />} />
-                <Route path="/posts/:id" element={<PostPage />} />
-                <Route path="/login" element={<LoginPage />} />
-              </Routes>
-            </AppLayout>
-          </AuthProvider>
-        </BrowserRouter>
-      </ThemeProvider>
+    <Providers>
+      <RouterProvider router={router} />
       <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+    </Providers>
   )
 }

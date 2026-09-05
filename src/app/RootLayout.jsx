@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, Outlet, useNavigation } from 'react-router-dom'
 import { useAuth } from '../features/auth'
 import { useTheme } from './theme/ThemeProvider'
 import { Avatar } from '../shared/ui/Avatar'
@@ -6,11 +6,18 @@ import { Button } from '../shared/ui/Button'
 import { RequestMeter } from '../shared/ui/RequestMeter'
 import { Toaster } from '../shared/ui/Toaster'
 
-export function AppLayout({ children }) {
+// The layout route's element. Everything shared across screens lives here;
+// <Outlet/> is the hole the matched child route renders into. Nest more
+// layout routes to get nested shells (e.g. a /settings sub-nav).
+export function RootLayout() {
   const { user, logout } = useAuth()
   const { theme, toggle } = useTheme()
+  const navigation = useNavigation()
+
   return (
     <div className="layout">
+      {/* loaders block the transition until data is ready — show it */}
+      <div className={`nav-progress ${navigation.state === 'loading' ? 'is-active' : ''}`} />
       <header className="topbar">
         <Link to="/" className="brand">Devlog</Link>
         <nav>
@@ -27,7 +34,9 @@ export function AppLayout({ children }) {
           )}
         </nav>
       </header>
-      <main>{children}</main>
+      <main>
+        <Outlet />
+      </main>
       <RequestMeter />
       <Toaster />
     </div>

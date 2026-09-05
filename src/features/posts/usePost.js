@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { getPost } from './api'
+import { postQuery } from './queries'
 
 export function usePost(id) {
-  return useQuery({ queryKey: ['posts', id], queryFn: () => getPost(id) })
+  return useQuery(postQuery(id))
 }

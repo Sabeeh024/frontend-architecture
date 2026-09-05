@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { getComments, addComment } from './api'
+import { addComment } from './api'
+import { commentsQuery } from './queries'
 
 // Read + write for one post's comments.
 // The write no longer needs a manual reload() wired through props: it just
@@ -7,10 +8,7 @@ import { getComments, addComment } from './api'
 export function useComments(postId) {
   const qc = useQueryClient()
 
-  const query = useQuery({
-    queryKey: ['comments', postId],
-    queryFn: () => getComments(postId),
-  })
+  const query = useQuery(commentsQuery(postId))
 
   const mutation = useMutation({
     mutationFn: (input) => addComment(postId, input),

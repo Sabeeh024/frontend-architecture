@@ -1,6 +1,7 @@
 import { Spinner } from './Spinner'
 
-// Render-prop + slots. Wraps a useAsync() result and owns the
+// Render-prop + slots. Takes anything with a { status, data, error } shape
+// (a useQuery result works directly) and owns the
 // pending / error / empty / success ladder so screens don't repeat it.
 //
 //   <Async state={postsState} empty={<p>No posts</p>}>

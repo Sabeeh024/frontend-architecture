@@ -92,6 +92,11 @@ the *same key* (subscribe, get updates, refetch-on-stale, mutations/invalidation
 from topic 03). `features/*/queries.js` holds the one shared definition so the
 key can't drift.
 
+Here the loader awaits **both** post and comments (`Promise.all`) — "block the
+navigation until the whole screen's data is ready". The prefetching guide also
+supports treating some data as *secondary*: start its fetch but don't await it,
+so navigation isn't blocked on it. Topic 06 switches comments to that.
+
 > Pure-loader alternative: skip React Query, `return getPost(id)` from the
 > loader, read with `useLoaderData()`. Less machinery, but you lose the shared
 > cache, background refetch, and mutation invalidation. Fine for simple apps.

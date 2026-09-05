@@ -133,6 +133,21 @@ store — call sites using `useFlag` don't change.
   parts of *one* domain need to co-locate.
 - **Provider hell (topic 05)** — down to 2, folded. Every concern moved to a
   store is one less provider.
+- **Deprecated `ensureQueryData` (topic 05)** — TanStack Query v5 deprecated
+  `ensureQueryData` / `fetchQuery` / `prefetchQuery` in favour of one method,
+  `queryClient.query()`. `app/queryClient.js` now exposes two helpers matching
+  the prefetching guide's two intents:
+
+  ```js
+  // CRITICAL — await it, block navigation, failure -> errorElement
+  loadQuery(opts)      = queryClient.query({ ...opts, staleTime: 'static' })
+  // SECONDARY — fire and forget, never blocks, never aborts the route
+  prefetchQuery(opts)  = void queryClient.query(opts).catch(noop)
+  ```
+
+  `postLoader` now `await`s the post (`loadQuery`) and fire-and-forgets the
+  comments (`prefetchQuery`) — comments still start in parallel (no waterfall),
+  but a slow or failing comments fetch no longer holds up the post page.
 
 ---
 

@@ -1,8 +1,10 @@
-import { useContext } from 'react'
-import { AuthContext } from './AuthContext'
+import { useShallow } from 'zustand/react/shallow'
+import { useAuthStore } from './authStore'
 
+// Same shape components already expected: { user, pending, login, logout }.
+// useShallow => this component only re-renders when one of those fields changes.
 export function useAuth() {
-  const ctx = useContext(AuthContext)
-  if (!ctx) throw new Error('useAuth must be used inside <AuthProvider>')
-  return ctx
+  return useAuthStore(
+    useShallow((s) => ({ user: s.user, pending: s.pending, login: s.login, logout: s.logout })),
+  )
 }

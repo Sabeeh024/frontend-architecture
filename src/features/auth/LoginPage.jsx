@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from './useAuth'
 import { Button } from '../../shared/ui/Button'
 import { toast } from '../../shared/lib/toastStore'
@@ -7,19 +7,19 @@ import { toast } from '../../shared/lib/toastStore'
 export function LoginPage() {
   const { user, login, pending } = useAuth()
   const navigate = useNavigate()
+  const [params] = useSearchParams()
+  const next = params.get('next') || '/'
   const [name, setName] = useState('')
 
-  if (user) {
-    navigate('/')
-    return null
-  }
+  // Already signed in? Bounce — declaratively, not during render.
+  if (user) return <Navigate to={next} replace />
 
   async function handleSubmit(e) {
     e.preventDefault()
     if (!name.trim()) return
-    const user = await login(name.trim())
-    toast.success(`Welcome, ${user?.name ?? name.trim()}`)
-    navigate('/')
+    const u = await login(name.trim())
+    toast.success(`Welcome, ${u?.name ?? name.trim()}`)
+    navigate(next, { replace: true })
   }
 
   return (

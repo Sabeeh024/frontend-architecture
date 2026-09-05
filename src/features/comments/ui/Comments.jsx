@@ -6,6 +6,7 @@ import { Avatar } from '../../../shared/ui/Avatar'
 import { Button } from '../../../shared/ui/Button'
 import { Spinner } from '../../../shared/ui/Spinner'
 import { formatDate } from '../../../shared/lib/formatDate'
+import { toast } from '../../../shared/lib/toastStore'
 
 // Compound component. <Comments> holds the state; its sub-components read it
 // from context. The consumer composes the pieces and controls layout:
@@ -63,6 +64,9 @@ Comments.Form = function Form() {
     try {
       await add({ body: body.trim(), authorId: user.id })
       setBody('')
+      toast.success('Comment posted') // fired from deep in the tree, no wiring
+    } catch {
+      toast.error('Could not post comment')
     } finally {
       setBusy(false)
     }

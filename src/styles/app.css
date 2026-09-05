@@ -8,8 +8,9 @@
   font: 16px/1.6 system-ui, sans-serif;
 }
 @media (prefers-color-scheme: dark) {
-  :root { --bg: #16171d; --fg: #e5e7eb; --muted: #9ca3af; --border: #2e303a; --accent: #c084fc; }
+  :root:not([data-theme]) { --bg: #16171d; --fg: #e5e7eb; --muted: #9ca3af; --border: #2e303a; --accent: #c084fc; }
 }
+:root[data-theme='dark'] { --bg: #16171d; --fg: #e5e7eb; --muted: #9ca3af; --border: #2e303a; --accent: #c084fc; }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--fg); }
 a { color: var(--accent); text-decoration: none; }
@@ -44,3 +45,10 @@ textarea, input { font: inherit; padding: 8px; border: 1px solid var(--border); 
 .request-meter strong { color: var(--accent); font-size: 15px; }
 .request-meter ul { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 2px; }
 .request-meter code { font-size: 11px; }
+
+.toaster { position: fixed; right: 12px; bottom: 12px; display: grid; gap: 8px; z-index: 50; }
+.toast { font: inherit; text-align: left; border: 1px solid var(--border); border-left-width: 4px; border-radius: 6px; padding: 10px 14px; background: var(--bg); color: var(--fg); box-shadow: 0 4px 12px rgba(0,0,0,.15); cursor: pointer; animation: toast-in .15s ease-out; }
+.toast--success { border-left-color: #16a34a; }
+.toast--error { border-left-color: #dc2626; }
+.toast--info { border-left-color: var(--accent); }
+@keyframes toast-in { from { opacity: 0; transform: translateY(6px); } }

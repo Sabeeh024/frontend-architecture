@@ -10,7 +10,9 @@ export function AuthProvider({ children }) {
   async function login(name) {
     setPending(true)
     try {
-      setUser(await loginApi(name))
+      const u = await loginApi(name)
+      setUser(u)
+      return u
     } finally {
       setPending(false)
     }

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from './useAuth'
 import { Button } from '../../shared/ui/Button'
+import { toast } from '../../shared/lib/toastStore'
 
 export function LoginPage() {
   const { user, login, pending } = useAuth()
@@ -16,7 +17,8 @@ export function LoginPage() {
   async function handleSubmit(e) {
     e.preventDefault()
     if (!name.trim()) return
-    await login(name.trim())
+    const user = await login(name.trim())
+    toast.success(`Welcome, ${user?.name ?? name.trim()}`)
     navigate('/')
   }
 

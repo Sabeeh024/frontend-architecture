@@ -26,7 +26,7 @@ export function RootLayout() {
           </Button>
           {user ? (
             <span className="who">
-              <Avatar name={user.name} /> {user.name}
+              <Link to="/settings"><Avatar name={user.name} /> {user.name}</Link>
               <Button variant="ghost" onClick={logout}>Log out</Button>
             </span>
           ) : (

@@ -8,3 +8,11 @@ export const queryClient = new QueryClient({
     },
   },
 })
+
+// Loader helper: v5's unified imperative method (replaces the now-deprecated
+// ensureQueryData / fetchQuery / prefetchQuery). `staleTime: 'static'` means
+// "return whatever is in cache without refetching; only fetch on a miss" —
+// the old ensureQueryData behaviour. The component's useQuery still handles
+// background revalidation once mounted.
+export const loadQuery = (options) =>
+  queryClient.query({ ...options, staleTime: 'static' })

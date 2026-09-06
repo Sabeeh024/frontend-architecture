@@ -163,16 +163,41 @@ Cross-cutting inventory: theme=Context, auth=store, toasts=store, flags=module,
 errors=layered boundaries, route-guard=loader. The through-line: **push it to
 the lowest layer that has no React dependency, unless only components need it.**
 
-## Next questions this raises
+## Follow-ups — resolved
 
-- Optimistic updates (the topic-03 leftover): `useMutation`'s `onMutate` writes
-  the new comment into the cache immediately, `onError` rolls back. Better
-  perceived speed, real complexity — worth it for high-frequency actions, skip
-  for rare ones.
-- Analytics / logging are cross-cutting too — decorator around the queryClient?
-  a router subscriber? an effect in `RootLayout`?
-- i18n: message catalog as a module, but the *current locale* — Context or
-  store? (store, if URLs or loaders are locale-aware)
-- This is where topic 07 lands: none of these boundaries are *enforced*. What
-  stops `shared/` importing a feature, or two features importing each other?
-  → dependency rules + lint.
+**Optimistic updates** (topic-03 leftover) — *done*, commit "optimistic comment
+updates". `useComments`'s mutation:
+- `onMutate` → `cancelQueries` (stop in-flight refetches clobbering us),
+  snapshot the list for rollback, `setQueryData` to append a `pending: true`
+  comment. `CommentForm` clears the textarea right away.
+- `onError(_, _, ctx)` → `setQueryData(key, ctx.previous)` — roll back.
+- `onSettled` → `invalidateQueries` — reconcile with the server (the temp id is
+  replaced by the real row).
+
+Pending comments render at 50% opacity. The list + count update on click, not
+on round-trip. Cost: ~20 lines and you now maintain a client-side copy of the
+server's append logic — worth it for a comment box, not for a rare settings
+save.
+
+**Analytics / logging** — *done*, commit "cross-cutting analytics/logging".
+`shared/lib/analytics.js` `track()` is a plain module. Three attach points, one
+per situation:
+| where | catches | code |
+|---|---|---|
+| `QueryCache` / `MutationCache` `onError` on the queryClient | every failed query/mutation, app-wide | `app/queryClient.js` |
+| `router.subscribe(...)` | every completed navigation | `app/router.jsx` |
+| inline `track('login', …)` | a specific user action | `authStore` |
+The global handlers do **logging only** — user-facing error UI stays at the
+call site (component branch, `toast.error`). Same split as error handling:
+coarse layer observes, fine layer reacts.
+
+**i18n** — *not built* (a token system would be noise here), but the shape:
+message catalog = a plain module (`messages.en`, `t(key)`); current locale = a
+**store**, because loaders and URL matching (`/en/posts/…`) need to read it
+outside React — same reasoning as the auth store.
+
+## Next: enforcement (topic 07)
+
+None of the boundaries in this app are *enforced*. Nothing stops `shared/`
+importing a feature, `PostPage` deep-importing `auth/authStore` past the
+barrel, or a new cycle forming. → dependency rules + lint.

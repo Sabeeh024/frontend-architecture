@@ -35,7 +35,7 @@ Comments.List = function List() {
   return (
     <ul className="comment-list">
       {comments.map((c) => (
-        <li key={c.id}>
+        <li key={c.id} className={c.pending ? 'is-pending' : undefined}>
           <p className="meta"><Avatar name={c.author.name} /> {c.author.name} · {formatDate(c.createdAt)}</p>
           <p>{c.body}</p>
         </li>
@@ -62,8 +62,8 @@ Comments.Form = function Form() {
     if (!body.trim()) return
     setBusy(true)
     try {
-      await add({ body: body.trim(), authorId: user.id })
-      setBody('')
+      setBody('') // clear immediately — the optimistic comment is already showing
+      await add({ body: body.trim(), author: user })
       toast.success('Comment posted') // fired from deep in the tree, no wiring
     } catch {
       toast.error('Could not post comment')

@@ -37,6 +37,7 @@ a:hover { text-decoration: underline; }
 
 .comments { margin-top: 40px; }
 .comment-list { list-style: none; padding: 0; display: grid; gap: 16px; }
+.comment-list .is-pending { opacity: .5; }
 .comment-form { display: grid; gap: 8px; margin-top: 16px; }
 textarea, input { font: inherit; padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--fg); }
 

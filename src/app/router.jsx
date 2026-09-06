@@ -3,6 +3,7 @@ import { loadQuery, prefetchQuery } from './queryClient'
 import { RootLayout } from './RootLayout'
 import { RouteError } from './RouteError'
 import { requireAuth } from './routeGuards'
+import { track } from '../shared/lib/analytics'
 import { postsQuery, postQuery } from '../features/posts/queries'
 import { commentsQuery } from '../features/comments/queries'
 
@@ -57,3 +58,11 @@ export const router = createBrowserRouter([
     ],
   },
 ])
+
+// Cross-cutting concern #2: observability via a *router subscriber*. Every
+// completed navigation, in one place, without touching a single route.
+router.subscribe((state) => {
+  if (state.navigation.state === 'idle') {
+    track('navigate', { pathname: state.location.pathname })
+  }
+})

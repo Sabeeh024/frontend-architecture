@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { track } from '../../shared/lib/analytics'
 import { login as loginApi } from './api'
 
 // Auth moved from Context to a store for one concrete reason: route loaders
@@ -14,6 +15,7 @@ export const useAuthStore = create((set) => ({
     try {
       const u = await loginApi(name)
       set({ user: u })
+      track('login', { userId: u.id }) // cross-cutting concern #3: inline call site
       return u
     } finally {
       set({ pending: false })

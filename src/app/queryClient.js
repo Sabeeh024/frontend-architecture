@@ -1,6 +1,17 @@
-import { QueryClient } from '@tanstack/react-query'
+import { QueryClient, QueryCache, MutationCache } from '@tanstack/react-query'
+import { track } from '../shared/lib/analytics'
 
+// Cross-cutting concern #1: observability via a *decorator on the queryClient*.
+// One global place every failed query/mutation passes through — logging only.
+// User-facing error UI stays at the call site (component branch / toast).
 export const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: (error, query) =>
+      track('query_error', { key: query.queryKey, message: error.message }),
+  }),
+  mutationCache: new MutationCache({
+    onError: (error) => track('mutation_error', { message: error.message }),
+  }),
   defaultOptions: {
     queries: {
       staleTime: 30_000, // data is "fresh" for 30s -> no refetch on remount/navigation

@@ -19,8 +19,10 @@ const postLoader = ({ params }) => {
   return loadQuery(postQuery(params.id))
 }
 
-// Each page is only imported through import() -> its own JS chunk.
-export const router = createBrowserRouter([
+// The route tree, separate from the router instance so tests can build a
+// createMemoryRouter from the same config. Each page is imported only through
+// import() -> its own JS chunk.
+export const routes = [
   {
     path: '/',
     element: <RootLayout />,
@@ -57,7 +59,9 @@ export const router = createBrowserRouter([
       },
     ],
   },
-])
+]
+
+export const router = createBrowserRouter(routes)
 
 // Cross-cutting concern #2: observability via a *router subscriber*. Every
 // completed navigation, in one place, without touching a single route.

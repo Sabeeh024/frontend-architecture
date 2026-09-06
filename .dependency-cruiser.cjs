@@ -34,6 +34,7 @@ module.exports = {
   ],
   options: {
     doNotFollow: { path: 'node_modules' },
+    exclude: { path: ['\\.test\\.[jt]sx?$', '^src/test/'] },
     enhancedResolveOptions: { extensions: ['.js', '.jsx'] },
     reporterOptions: {
       dot: { collapsePattern: 'node_modules/(?:@[^/]+/[^/]+|[^/]+)' },

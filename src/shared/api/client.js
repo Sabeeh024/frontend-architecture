@@ -1,9 +1,11 @@
 // Fake network layer: in-memory seed data + artificial latency.
 // Feature api slices build on top of this; it knows nothing about features.
 
-const LATENCY = 400
+// No artificial delay under test — tests assert on states, not stopwatch timing.
+// (A test that needs to observe an in-flight state stubs its own timing.)
+const LATENCY = import.meta.env?.MODE === 'test' ? 0 : 400
 
-const db = {
+const seed = () => ({
   users: [
     { id: 'u1', name: 'Ada Lovelace' },
     { id: 'u2', name: 'Alan Turing' },
@@ -15,7 +17,11 @@ const db = {
   comments: [
     { id: 'c1', postId: 'p1', authorId: 'u2', body: 'Breaks down once you have 30 features.', createdAt: '2026-08-21T09:00:00Z' },
   ],
-}
+})
+
+// `let`, not `const`: resetDb() reassigns it; consumers get the new value
+// through the live ES-module binding.
+export let db = seed()
 
 let seq = 100
 const nextId = (prefix) => `${prefix}${seq++}`
@@ -28,6 +34,14 @@ export function onRequest(fn) {
   return () => listeners.delete(fn)
 }
 
+// Test seam: restore the fixture between tests (src/test/setup.js afterEach).
+export function resetDb() {
+  db = seed()
+  seq = 100
+  requestLog.count = 0
+  requestLog.byLabel = {}
+}
+
 export function fake(resolver, label = 'request') {
   requestLog.count += 1
   requestLog.byLabel[label] = (requestLog.byLabel[label] ?? 0) + 1
@@ -37,4 +51,4 @@ export function fake(resolver, label = 'request') {
   })
 }
 
-export { db, nextId }
+export { nextId }

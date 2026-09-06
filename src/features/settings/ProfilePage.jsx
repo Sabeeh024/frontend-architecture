@@ -1,5 +1,5 @@
 import { useAuth } from '../auth'
-import { useTheme } from '../../app/theme/ThemeProvider'
+import { useTheme } from '../../shared/theme/ThemeProvider'
 import { Avatar } from '../../shared/ui/Avatar'
 
 export function ProfilePage() {

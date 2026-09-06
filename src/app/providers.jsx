@@ -1,6 +1,6 @@
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from './queryClient'
-import { ThemeProvider } from './theme/ThemeProvider'
+import { ThemeProvider } from '../shared/theme/ThemeProvider'
 
 // Only two providers now — auth became a store (no provider needed), which is
 // half the point of stores for cross-cutting state. Fold the rest once.

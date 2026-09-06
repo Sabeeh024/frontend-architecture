@@ -1,6 +1,6 @@
 import { Link, Outlet, useNavigation } from 'react-router-dom'
 import { useAuth } from '../features/auth'
-import { useTheme } from './theme/ThemeProvider'
+import { useTheme } from '../shared/theme/ThemeProvider'
 import { Avatar } from '../shared/ui/Avatar'
 import { Button } from '../shared/ui/Button'
 import { RequestMeter } from '../shared/ui/RequestMeter'

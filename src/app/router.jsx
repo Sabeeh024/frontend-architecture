@@ -1,8 +1,10 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, redirect } from 'react-router-dom'
 import { loadQuery, prefetchQuery } from './queryClient'
 import { RootLayout } from './RootLayout'
 import { RouteError } from './RouteError'
 import { requireAuth } from './routeGuards'
+import { localeLoader } from './localeLoader'
+import { resolveLocale } from '../shared/i18n/localeStore'
 import { track } from '../shared/lib/analytics'
 import { postsQuery, postQuery } from '../features/posts/queries'
 import { commentsQuery } from '../features/comments/queries'
@@ -24,7 +26,15 @@ const postLoader = ({ params }) => {
 // import() -> its own JS chunk.
 export const routes = [
   {
-    path: '/',
+    // A bare visit ("/") carries no locale — redirect to one, once. Every
+    // link and navigation after this always includes /:locale explicitly;
+    // nothing else in the app ever redirects for locale again.
+    index: true,
+    loader: () => redirect(`/${resolveLocale()}`),
+  },
+  {
+    path: ':locale',
+    loader: localeLoader, // validates the segment, syncs the locale store + <html lang>
     element: <RootLayout />,
     errorElement: <RouteError />,
     children: [

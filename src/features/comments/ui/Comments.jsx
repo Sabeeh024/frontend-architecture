@@ -8,6 +8,7 @@ import { Spinner } from '../../../shared/ui/Spinner'
 import { formatDate } from '../../../shared/lib/formatDate'
 import { toast } from '../../../shared/lib/toastStore'
 import { useT, useTn } from '../../../shared/i18n/t'
+import { useLocalizedPath } from '../../../shared/i18n/useLocalizedPath'
 
 // Compound component. <Comments> holds the state; its sub-components read it
 // from context. The consumer composes the pieces and controls layout:
@@ -60,8 +61,9 @@ Comments.Form = function Form() {
   const [body, setBody] = useState('')
   const [busy, setBusy] = useState(false)
   const t = useT()
+  const to = useLocalizedPath()
 
-  if (!user) return <p className="muted"><Link to="/login">{t('nav.login')}</Link> {t('comments.loginPrompt')}</p>
+  if (!user) return <p className="muted"><Link to={to('/login')}>{t('nav.login')}</Link> {t('comments.loginPrompt')}</p>
 
   async function handleSubmit(e) {
     e.preventDefault()

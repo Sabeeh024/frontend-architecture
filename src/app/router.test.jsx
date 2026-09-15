@@ -24,24 +24,31 @@ function renderApp(initialEntry) {
 }
 
 describe('app routing', () => {
-  it('renders the feed with data from the loader', async () => {
-    renderApp('/')
+  it('a bare "/" redirects to a resolved locale, then renders the feed', async () => {
+    const router = renderApp('/')
     expect(await screen.findByRole('heading', { name: 'Feed' })).toBeInTheDocument()
     expect(await screen.findByRole('link', { name: 'On layered architecture' })).toBeInTheDocument()
+    expect(router.state.location.pathname).toBe('/en')
   })
 
-  it('the loader guard bounces /settings to /login when signed out', async () => {
-    const router = renderApp('/settings')
+  it('the loader guard bounces /en/settings to /en/login when signed out', async () => {
+    const router = renderApp('/en/settings')
     expect(await screen.findByRole('heading', { name: 'Log in' })).toBeInTheDocument()
-    expect(router.state.location.pathname).toBe('/login')
-    expect(router.state.location.search).toBe('?next=%2Fsettings')
+    expect(router.state.location.pathname).toBe('/en/login')
+    expect(router.state.location.search).toBe('?next=%2Fen%2Fsettings')
   })
 
-  it('lets a signed-in user reach /settings', async () => {
+  it('lets a signed-in user reach /en/settings', async () => {
     useAuthStore.setState({ user: { id: 'u1', name: 'Ada Lovelace' } })
-    renderApp('/settings')
+    renderApp('/en/settings')
     expect(await screen.findByRole('heading', { name: 'Settings' })).toBeInTheDocument()
     expect(await screen.findByText('User id:', { exact: false })).toBeInTheDocument()
+  })
+
+  it('an unsupported locale segment 404s via the loader, same errorElement', async () => {
+    renderApp('/fr')
+    expect(await screen.findByText(/Unsupported locale/)).toBeInTheDocument()
+    expect(await screen.findByText(/Back to feed/)).toBeInTheDocument()
   })
 
   it('shows the route errorElement for an unmatched path', async () => {

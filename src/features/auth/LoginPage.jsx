@@ -4,14 +4,16 @@ import { useAuth } from './useAuth'
 import { Button } from '../../shared/ui/Button'
 import { toast } from '../../shared/lib/toastStore'
 import { useT } from '../../shared/i18n/t'
+import { useLocalizedPath } from '../../shared/i18n/useLocalizedPath'
 
 export function LoginPage() {
   const { user, login, pending } = useAuth()
   const navigate = useNavigate()
   const [params] = useSearchParams()
-  const next = params.get('next') || '/'
-  const [name, setName] = useState('')
   const t = useT()
+  const to = useLocalizedPath()
+  const next = params.get('next') || to('/') // no ?next= -> the locale's own feed, not bare "/"
+  const [name, setName] = useState('')
 
   // Already signed in? Bounce — declaratively, not during render.
   if (user) return <Navigate to={next} replace />

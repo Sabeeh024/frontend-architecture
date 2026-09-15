@@ -19,6 +19,9 @@ export function RouteError() {
       <main>
         <h1>{title}</h1>
         {detail && <p className="muted">{detail}</p>}
+        {/* Deliberately "/" (not locale-prefixed): this page can be showing
+            because the :locale segment itself was invalid, so build a link
+            off that same broken param — "/" re-resolves a real one. */}
         <p><Link to="/">← {t('post.backToFeed')}</Link></p>
       </main>
     </div>

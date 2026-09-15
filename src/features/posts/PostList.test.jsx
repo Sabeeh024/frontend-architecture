@@ -19,7 +19,7 @@ describe('<PostList>', () => {
 
   it('links each title to that post', () => {
     renderWithProviders(<PostList posts={posts} />)
-    expect(screen.getByRole('link', { name: 'First' })).toHaveAttribute('href', '/posts/p1')
+    expect(screen.getByRole('link', { name: 'First' })).toHaveAttribute('href', '/en/posts/p1')
   })
 
   it('shows author and formatted date', () => {

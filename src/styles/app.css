@@ -20,8 +20,10 @@ a:hover { text-decoration: underline; }
 .nav-progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--accent); transition: width .3s ease; z-index: 100; }
 .nav-progress.is-active { width: 80%; transition: width 8s cubic-bezier(0,.7,.2,1); }
 .topbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
+.topbar nav { display: flex; align-items: center; gap: 8px; }
 .brand { font-weight: 700; font-size: 20px; }
 .who { display: inline-flex; align-items: center; gap: 8px; }
+.comment-count { margin-top: -4px; font-size: 13px; }
 
 .avatar { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; }
 .meta { color: var(--muted); font-size: 14px; display: flex; align-items: center; gap: 6px; }

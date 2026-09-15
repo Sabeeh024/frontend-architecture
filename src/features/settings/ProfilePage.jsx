@@ -1,15 +1,17 @@
 import { useAuth } from '../auth'
 import { useTheme } from '../../shared/theme/ThemeProvider'
 import { Avatar } from '../../shared/ui/Avatar'
+import { useT } from '../../shared/i18n/t'
 
 export function ProfilePage() {
   const { user } = useAuth()
   const { theme } = useTheme()
+  const t = useT()
   return (
     <div className="card">
       <p className="meta"><Avatar name={user.name} /> {user.name}</p>
-      <p className="muted">User id: <code>{user.id}</code></p>
-      <p className="muted">Current theme: {theme}</p>
+      <p className="muted">{t('settings.userId')} <code>{user.id}</code></p>
+      <p className="muted">{t('settings.currentTheme')} {theme}</p>
     </div>
   )
 }

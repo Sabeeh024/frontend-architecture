@@ -7,6 +7,7 @@ import { Button } from '../../../shared/ui/Button'
 import { Spinner } from '../../../shared/ui/Spinner'
 import { formatDate } from '../../../shared/lib/formatDate'
 import { toast } from '../../../shared/lib/toastStore'
+import { useT, useTn } from '../../../shared/i18n/t'
 
 // Compound component. <Comments> holds the state; its sub-components read it
 // from context. The consumer composes the pieces and controls layout:
@@ -30,8 +31,9 @@ export function Comments({ postId, children }) {
 
 Comments.List = function List() {
   const { comments, loading } = useCtx()
-  if (loading) return <Spinner label="Loading comments…" />
-  if (comments.length === 0) return <p className="muted">No comments yet.</p>
+  const t = useT()
+  if (loading) return <Spinner label={t('comments.loading')} />
+  if (comments.length === 0) return <p className="muted">{t('comments.empty')}</p>
   return (
     <ul className="comment-list">
       {comments.map((c) => (
@@ -44,9 +46,12 @@ Comments.List = function List() {
   )
 }
 
+// Pluralized: 0/1/n each get their own phrasing (comments.count.zero/one/other
+// in the catalog) instead of a bare number stuffed into a fixed sentence.
 Comments.Count = function Count() {
   const { comments } = useCtx()
-  return <span>{comments.length}</span>
+  const tn = useTn()
+  return <>{tn('comments.count', comments.length)}</>
 }
 
 Comments.Form = function Form() {
@@ -54,8 +59,9 @@ Comments.Form = function Form() {
   const { user } = useAuth()
   const [body, setBody] = useState('')
   const [busy, setBusy] = useState(false)
+  const t = useT()
 
-  if (!user) return <p className="muted"><Link to="/login">Log in</Link> to comment.</p>
+  if (!user) return <p className="muted"><Link to="/login">{t('nav.login')}</Link> {t('comments.loginPrompt')}</p>
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -64,9 +70,9 @@ Comments.Form = function Form() {
     try {
       setBody('') // clear immediately — the optimistic comment is already showing
       await add({ body: body.trim(), author: user })
-      toast.success('Comment posted') // fired from deep in the tree, no wiring
+      toast.success(t('comments.posted')) // fired from deep in the tree, no wiring
     } catch {
-      toast.error('Could not post comment')
+      toast.error(t('comments.postFailed'))
     } finally {
       setBusy(false)
     }
@@ -74,8 +80,8 @@ Comments.Form = function Form() {
 
   return (
     <form className="comment-form" onSubmit={handleSubmit}>
-      <textarea value={body} onChange={(e) => setBody(e.target.value)} placeholder="Add a comment…" rows={3} />
-      <Button type="submit" disabled={busy}>{busy ? 'Posting…' : 'Post comment'}</Button>
+      <textarea value={body} onChange={(e) => setBody(e.target.value)} placeholder={t('comments.placeholder')} rows={3} />
+      <Button type="submit" disabled={busy}>{busy ? t('comments.posting') : t('comments.post')}</Button>
     </form>
   )
 }

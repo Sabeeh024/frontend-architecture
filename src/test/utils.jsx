@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { render } from '@testing-library/react'
 
 // A fresh QueryClient per test = no cache bleed between tests. retry:false so a
@@ -11,10 +11,17 @@ export function makeQueryClient() {
 }
 
 // Render a component with the providers most of the app assumes exist.
-export function renderWithProviders(ui, { route = '/', client = makeQueryClient() } = {}) {
+// Every route sits under /:locale (topic 09), so the component needs a
+// matched :locale param even in isolation — useLocalizedPath reads it via
+// useParams(). `route` is the full path visited, e.g. '/en/settings'.
+export function renderWithProviders(ui, { route = '/en', client = makeQueryClient() } = {}) {
   return render(
     <QueryClientProvider client={client}>
-      <MemoryRouter initialEntries={[route]}>{ui}</MemoryRouter>
+      <MemoryRouter initialEntries={[route]}>
+        <Routes>
+          <Route path=":locale/*" element={ui} />
+        </Routes>
+      </MemoryRouter>
     </QueryClientProvider>,
   )
 }

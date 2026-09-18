@@ -1,0 +1,44 @@
+{
+  "name": "devlog",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "oxlint && eslint .",
+    "lint:boundaries": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "depgraph": "depcruise src --config .dependency-cruiser.cjs --output-type mermaid --output-to docs/dependency-graph.mmd",
+    "depgraph:check": "depcruise src --config .dependency-cruiser.cjs",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.102.8",
+    "@tanstack/react-query-devtools": "^5.102.8",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.3",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.7",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.1.0",
+    "dependency-cruiser": "^18.2.0",
+    "eslint": "^9.39.5",
+    "eslint-plugin-boundaries": "^7.2.0",
+    "eslint-plugin-import-x": "^4.17.1",
+    "globals": "^17.12.0",
+    "happy-dom": "^20.14.0",
+    "jsdom": "^30.0.1",
+    "oxlint": "^1.79.0",
+    "vite": "^8.2.2",
+    "vitest": "^3.2.7"
+  }
+}

@@ -1,16 +1,25 @@
-# React + Vite
+# frontend-architecture
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A learning sandbox exploring frontend architecture — see [`NOTES/README.md`](NOTES/README.md)
+for the full write-up, topic by topic.
 
-Currently, two official plugins are available:
+As of topic 10 this is an **npm workspaces + Turborepo monorepo**:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```
+apps/
+  devlog/     the example app (feed / post / comments), topics 01-09
+packages/     (not yet — topic 11)
+```
 
-## React Compiler
+## Commands (from the repo root)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install       # installs every workspace's deps in one pass
+npm run dev        # -> turbo run dev      (starts every app's dev server)
+npm run build       # -> turbo run build
+npm run lint         # -> turbo run lint     (oxlint + eslint boundaries, per app)
+npm run test          # -> turbo run test
+npm run depgraph:check # -> turbo run depgraph:check
+```
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Or run a single app's scripts directly from its folder, e.g. `cd apps/devlog && npm run dev`.

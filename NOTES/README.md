@@ -1,10 +1,11 @@
-# Frontend architecture — inside the app
+# Frontend architecture
 
-Nine topics, each explored by actually building it into **Devlog** (a tiny
-feed/post/comments app with a mock in-memory API) on its own branch, then
-written up here. `master` holds only these notes and the pristine scaffold —
-every branch below carries the code for that topic, chained onto the one
-before it.
+Each topic explored by actually building it — on Devlog (a tiny feed/post/
+comments app with a mock in-memory API) for topics 01–09, on the repo itself
+from topic 10 on — on its own branch, chained onto the one before it, then
+written up here. `master` holds only these notes and the pristine scaffold.
+
+## Part 1 — inside the app (01–09)
 
 | # | topic | branch | the one-line takeaway |
 |---|---|---|---|
@@ -39,9 +40,18 @@ Context vs. store vs. module by one clear rule, a test per architectural
 layer, and locale as a first-class routing concern. That's the acyclic,
 one-directional, checked dependency graph the next phase assumes.
 
-## Next: outside the app
+## Part 2 — outside the app (10–)
 
-Everything above is one app in one repo. What changes when there's more than
-one — a design system shared across products, a monorepo with independently
-deployable features, a micro-frontend split, a module-federation boundary?
-That's the next set of topics, not yet started.
+Everything in part 1 is one app in one repo. What changes when there's more
+than one — a design system shared across products, a monorepo with
+independently deployable features, a micro-frontend split, a module-
+federation boundary?
+
+| # | topic | branch | the one-line takeaway |
+|---|---|---|---|
+| 10 | [Monorepo fundamentals](10-monorepo.md) | `topic/10-monorepo` | The repo becomes an npm workspaces + Turborepo monorepo; Devlog moves to `apps/devlog` unchanged. CI needed zero edits — the root script *names* stayed stable while what they fan out to changed completely |
+
+Planned next: extracting a shared UI package (11), a second app proving the
+reuse (12), shared logic beyond UI (13), build orchestration at scale (14),
+versioning & release (15), micro-frontends (16), cross-app cross-cutting
+concerns (17) — subject to change as we go, same as part 1.

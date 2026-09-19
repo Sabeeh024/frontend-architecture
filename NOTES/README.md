@@ -51,8 +51,8 @@ federation boundary?
 |---|---|---|---|
 | 10 | [Monorepo fundamentals](10-monorepo.md) | `topic/10-monorepo` | The repo becomes an npm workspaces + Turborepo monorepo; Devlog moves to `apps/devlog` unchanged. CI needed zero edits — the root script *names* stayed stable while what they fan out to changed completely |
 | 11 | [Shared UI package](11-shared-ui.md) | `topic/11-shared-ui` | The presentational-component test from topic 02 ("does it know anything about this app?") decides what moves into `packages/ui`; `Toaster` splits at exactly that line — a pure `ToastList` in the package, the store-wired half stays in the app |
+| 12 | [A second app](12-second-app.md) | `topic/12-second-app` | `apps/admin` proves the reuse — a `<Button>`/`<Avatar>` dropped in with zero CSS written, themed correctly (dark mode included) because tokens moved into `packages/ui/styles.css`. Deliberately does NOT share data or React Query with Devlog — a second app repeats only the decisions that solve its own problem |
 
-Planned next: a second app proving the reuse (12), shared logic beyond UI
-(13), build orchestration at scale (14), versioning & release (15),
-micro-frontends (16), cross-app cross-cutting concerns (17) — subject to
-change as we go, same as part 1.
+Planned next: shared logic beyond UI (13), build orchestration at scale (14),
+versioning & release (15), micro-frontends (16), cross-app cross-cutting
+concerns (17) — subject to change as we go, same as part 1.

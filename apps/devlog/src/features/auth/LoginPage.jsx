@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from './useAuth'
-import { Button } from '../../shared/ui/Button'
+import { Button } from '@repo/ui'
 import { toast } from '../../shared/lib/toastStore'
 import { useT } from '../../shared/i18n/t'
 import { useLocalizedPath } from '../../shared/i18n/useLocalizedPath'

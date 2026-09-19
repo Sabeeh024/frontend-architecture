@@ -1,6 +1,6 @@
 import { usePosts } from './usePosts'
 import { PostList } from './PostList'
-import { Async } from '../../shared/ui/Async'
+import { Async } from '@repo/ui'
 import { useT } from '../../shared/i18n/t'
 
 // Container ("smart"): owns the data, delegates every rendering decision.

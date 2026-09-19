@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button } from '../../shared/ui/Button'
+import { Button } from '@repo/ui'
 
 // Gated by the `reactions` flag in PostPage. Trivial on purpose — the point is
 // the flag boundary, not the feature.

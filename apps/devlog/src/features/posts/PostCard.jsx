@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Avatar } from '../../shared/ui/Avatar'
+import { Avatar } from '@repo/ui'
 import { formatDate } from '../../shared/lib/formatDate'
 import { useLocalizedPath } from '../../shared/i18n/useLocalizedPath'
 

@@ -1,0 +1,48 @@
+/* Design tokens + base reset + the CSS for every component this package
+   exports. An app that imports this gets Button/Spinner/Avatar/ToastList
+   looking right with zero CSS of its own — only its own layout is left to
+   write. Moved here from apps/devlog/src/styles/app.css in topic 12, once a
+   second app existed to prove what "shared" actually needed to mean. */
+
+:root {
+  --bg: #fff;
+  --fg: #1a1a1a;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --accent: #6d28d9;
+  color-scheme: light dark;
+  font: 16px/1.6 system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) { --bg: #16171d; --fg: #e5e7eb; --muted: #9ca3af; --border: #2e303a; --accent: #c084fc; }
+}
+:root[data-theme='dark'] { --bg: #16171d; --fg: #e5e7eb; --muted: #9ca3af; --border: #2e303a; --accent: #c084fc; }
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Button */
+.btn { font: inherit; padding: 8px 14px; border-radius: 6px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; }
+.btn--ghost { background: transparent; color: var(--accent); }
+.btn:disabled { opacity: .6; cursor: default; }
+
+/* Spinner */
+.spinner { color: var(--muted); }
+
+/* Avatar */
+.avatar { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 11px; font-weight: 700; }
+
+/* ToastList */
+.toaster { position: fixed; right: 12px; bottom: 12px; display: grid; gap: 8px; z-index: 50; }
+.toast { font: inherit; text-align: left; border: 1px solid var(--border); border-left-width: 4px; border-radius: 6px; padding: 10px 14px; background: var(--bg); color: var(--fg); box-shadow: 0 4px 12px rgba(0,0,0,.15); cursor: pointer; animation: toast-in .15s ease-out; }
+.toast--success { border-left-color: #16a34a; }
+.toast--error { border-left-color: #dc2626; }
+.toast--info { border-left-color: var(--accent); }
+@keyframes toast-in { from { opacity: 0; transform: translateY(6px); } }
+
+/* Generic utilities used across apps — not a JSX component, just tokens-in-CSS */
+.muted { color: var(--muted); }
+.card { border: 1px solid var(--border); border-radius: 8px; padding: 16px; display: grid; gap: 8px; }
+textarea, input { font: inherit; padding: 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); color: var(--fg); }

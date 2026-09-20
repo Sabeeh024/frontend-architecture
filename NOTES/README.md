@@ -54,6 +54,7 @@ federation boundary?
 | 12 | [A second app](12-second-app.md) | `topic/12-second-app` | `apps/admin` proves the reuse — a `<Button>`/`<Avatar>` dropped in with zero CSS written, themed correctly (dark mode included) because tokens moved into `packages/ui/styles.css`. Deliberately does NOT share data or React Query with Devlog — a second app repeats only the decisions that solve its own problem |
 | 13 | [Shared logic beyond UI](13-shared-logic.md) | `topic/13-shared-logic` | `packages/api-client` closes topic 12's gap — Admin now moderates Devlog's actual posts. No React in this package, unlike `packages/ui`: not every shared package looks like the first one. Honest limit found: shared *code*, not a shared *runtime* — two dev processes each hold their own copy of the fake in-memory db |
 | 14 | [Build orchestration at scale](14-build-orchestration.md) | `topic/14-build-orchestration` | `--filter=...[ref]` computes the actually-affected packages from a git diff (verified against two real diffs); `globalDependencies` fixes cache invalidation for inputs no single package owns; CI wired to run only what a PR's diff could break. Remote caching described, not built — needs an external service this repo doesn't have |
+| 15 | [Versioning & release](15-versioning.md) | `topic/15-versioning` | Changesets, independent versioning; a real `size` prop on `Button` bumped `@repo/ui` 0.0.0→0.1.0 with a generated changelog. Honest nuance: consumers pin `"*"`, so the version is pure documentation until something depends on a real range. Hit and fixed a real bug: `@changesets/cli@3` silently no-op'd; pinned back to `2.31.1` |
 
-Planned next: versioning & release (15), micro-frontends (16), cross-app
-cross-cutting concerns (17) — subject to change as we go, same as part 1.
+Planned next: micro-frontends (16), cross-app cross-cutting concerns (17) —
+subject to change as we go, same as part 1.

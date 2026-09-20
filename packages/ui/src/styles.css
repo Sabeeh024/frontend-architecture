@@ -27,6 +27,9 @@ a:hover { text-decoration: underline; }
 .btn { font: inherit; padding: 8px 14px; border-radius: 6px; border: 1px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; }
 .btn--ghost { background: transparent; color: var(--accent); }
 .btn:disabled { opacity: .6; cursor: default; }
+.btn--sm { padding: 4px 10px; font-size: 13px; }
+.btn--md { /* the existing default padding above */ }
+.btn--lg { padding: 12px 20px; font-size: 17px; }
 
 /* Spinner */
 .spinner { color: var(--muted); }

@@ -1,4 +1,5 @@
-// topic 14 demo: a package change, every dependent app should show as affected.
-export function Button({ variant = 'primary', ...props }) {
-  return <button className={`btn btn--${variant}`} {...props} />
+// A real, small enhancement (topic 15): a `size` prop, additive and
+// backwards-compatible — the changeset for this describes exactly this.
+export function Button({ variant = 'primary', size = 'md', ...props }) {
+  return <button className={`btn btn--${variant} btn--${size}`} {...props} />
 }

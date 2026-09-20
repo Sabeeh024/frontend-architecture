@@ -13,9 +13,13 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "depgraph:check": "turbo run depgraph:check"
+    "depgraph:check": "turbo run depgraph:check",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "turbo run build --filter=@repo/* && changeset publish"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.1",
     "turbo": "^2.5.8"
   }
 }

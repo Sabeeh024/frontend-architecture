@@ -1,0 +1,43 @@
+name: Release
+
+# Standard Changesets flow: every push to the default branch checks for
+# unconsumed .changeset/*.md files. If there are any, it opens (or updates)
+# a "Version Packages" PR that runs `changeset version` for you — merging
+# THAT PR is what would trigger the publish step below.
+#
+# Unexercised in this repo on purpose (topic 15's honest gap, same category
+# as SSR in topic 09 and remote caching in topic 14): @repo/ui and
+# @repo/api-client are `"private": true` (topic 11) - workspace-only, never
+# meant to leave this repo - so `npm publish` would refuse them even with a
+# valid NPM_TOKEN. This workflow is what would take over the day either
+# package needs to be installable somewhere outside this monorepo; nothing
+# about the versioning/changelog mechanics topic 15 builds requires it.
+on:
+  push:
+    branches: [master]
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Create Release Pull Request or Publish
+        uses: changesets/action@v1
+        with:
+          version: npm run version-packages
+          publish: npm run release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Only needed once a package stops being private and actually
+          # gets published — absent here, so the publish step is a no-op.
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

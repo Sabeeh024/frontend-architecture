@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { requestLog, onRequest } from '../api/client'
+import { requestLog, onRequest } from '@repo/api-client'
 
 // Dev-only: shows how many network round-trips the app has made so far,
 // broken down by endpoint. Watch this climb as you navigate.

@@ -6,10 +6,10 @@ subgraph 1["app"]
 E["providers.jsx"]
 O["queryClient.js"]
 R["router.jsx"]
-2D["localeLoader.js"]
-2E["RootLayout.jsx"]
-2I["RouteError.jsx"]
-2J["routeGuards.js"]
+2I["localeLoader.js"]
+2J["RootLayout.jsx"]
+2N["RouteError.jsx"]
+2O["routeGuards.js"]
 end
 subgraph J["shared"]
 subgraph K["theme"]
@@ -18,7 +18,7 @@ end
 subgraph P["lib"]
 Q["analytics.js"]
 14["toastStore.js"]
-1T["formatDate.js"]
+1Y["formatDate.js"]
 end
 subgraph V["i18n"]
 W["t.js"]
@@ -29,15 +29,12 @@ subgraph 10["messages"]
 end
 13["useLocalizedPath.js"]
 end
-subgraph 1A["api"]
-1B["client.js"]
+subgraph 23["config"]
+24["flags.js"]
 end
-subgraph 1Y["config"]
-1Z["flags.js"]
-end
-subgraph 2F["ui"]
-2G["RequestMeter.jsx"]
-2H["Toaster.jsx"]
+subgraph 2K["ui"]
+2L["RequestMeter.jsx"]
+2M["Toaster.jsx"]
 end
 end
 subgraph S["features"]
@@ -46,40 +43,40 @@ U["LoginPage.jsx"]
 15["useAuth.js"]
 18["authStore.js"]
 19["api.js"]
-24["index.js"]
-end
-subgraph 1M["comments"]
-1N["queries.js"]
-1O["api.js"]
-20["index.js"]
-21["CommentsSection.jsx"]
-subgraph 22["ui"]
-23["Comments.jsx"]
-end
-25["useComments.js"]
-end
-subgraph 1P["posts"]
-1Q["FeedPage.jsx"]
-1R["PostList.jsx"]
-1S["PostCard.jsx"]
-1U["usePosts.js"]
-1V["queries.js"]
-1W["api.js"]
-1X["PostPage.jsx"]
-26["Reactions.jsx"]
-27["usePost.js"]
-2K["index.js"]
-end
-subgraph 28["settings"]
 29["index.js"]
-2A["AboutPage.jsx"]
-2B["ProfilePage.jsx"]
-2C["SettingsLayout.jsx"]
+end
+subgraph 1R["comments"]
+1S["queries.js"]
+1T["api.js"]
+25["index.js"]
+26["CommentsSection.jsx"]
+subgraph 27["ui"]
+28["Comments.jsx"]
+end
+2A["useComments.js"]
+end
+subgraph 1U["posts"]
+1V["FeedPage.jsx"]
+1W["PostList.jsx"]
+1X["PostCard.jsx"]
+1Z["usePosts.js"]
+20["queries.js"]
+21["api.js"]
+22["PostPage.jsx"]
+2B["Reactions.jsx"]
+2C["usePost.js"]
+2P["index.js"]
+end
+subgraph 2D["settings"]
+2E["index.js"]
+2F["AboutPage.jsx"]
+2G["ProfilePage.jsx"]
+2H["SettingsLayout.jsx"]
 end
 end
-2L["main.jsx"]
-subgraph 2M["styles"]
-2N["app.css"]
+2Q["main.jsx"]
+subgraph 2R["styles"]
+2S["app.css"]
 end
 end
 subgraph 3[".."]
@@ -115,20 +112,29 @@ subgraph 16["react"]
 17["shallow.js"]
 end
 end
-subgraph 2O["react-dom"]
-2P["client.js"]
+subgraph 2T["react-dom"]
+2U["client.js"]
 end
 end
-subgraph 1C["packages"]
-subgraph 1D["ui"]
-subgraph 1E["src"]
-1F["index.js"]
-1G["Async.jsx"]
-1H["Spinner.jsx"]
-1I["Avatar.jsx"]
-1J["Button.jsx"]
-1K["ErrorBoundary.jsx"]
-1L["ToastList.jsx"]
+subgraph 1A["packages"]
+subgraph 1B["api-client"]
+subgraph 1C["src"]
+1D["index.js"]
+1E["auth.js"]
+1F["client.js"]
+1G["comments.js"]
+1H["posts.js"]
+end
+end
+subgraph 1I["ui"]
+subgraph 1J["src"]
+1K["index.js"]
+1L["Async.jsx"]
+1M["Spinner.jsx"]
+1N["Avatar.jsx"]
+1O["Button.jsx"]
+1P["ErrorBoundary.jsx"]
+1Q["ToastList.jsx"]
 end
 end
 end
@@ -145,24 +151,24 @@ L-->N
 O-->Q
 O-->I
 R-->U
-R-->1N
-R-->1Q
-R-->1X
+R-->1S
 R-->1V
-R-->29
+R-->22
+R-->20
+R-->2E
 R-->X
 R-->Q
-R-->2D
-R-->O
-R-->2E
 R-->2I
+R-->O
 R-->2J
+R-->2N
+R-->2O
 R-->D
 U-->W
 U-->13
 U-->14
 U-->15
-U-->1F
+U-->1K
 U-->N
 U-->D
 W-->X
@@ -176,95 +182,102 @@ X-->Z
 18-->Q
 18-->19
 18-->Z
-19-->1B
-1F-->1G
-1F-->1I
-1F-->1J
-1F-->1K
-1F-->1H
-1F-->1L
-1G-->1H
-1K-->N
-1N-->1O
-1O-->1B
-1Q-->W
-1Q-->1R
-1Q-->1U
-1Q-->1F
-1R-->1S
-1S-->13
+19-->1D
+1D-->1E
+1D-->1F
+1D-->1G
+1D-->1H
+1E-->1F
+1G-->1F
+1H-->1F
+1K-->1L
+1K-->1N
+1K-->1O
+1K-->1P
+1K-->1M
+1K-->1Q
+1L-->1M
+1P-->N
 1S-->1T
-1S-->1F
-1S-->D
-1T-->X
-1U-->1V
-1U-->I
+1T-->1D
+1V-->W
 1V-->1W
-1W-->1B
-1X-->1Z
-1X-->W
+1V-->1Z
+1V-->1K
+1W-->1X
 1X-->13
-1X-->1T
-1X-->20
-1X-->26
-1X-->27
-1X-->1F
+1X-->1Y
+1X-->1K
 1X-->D
+1Y-->X
+1Z-->20
+1Z-->I
 20-->21
-20-->23
-21-->W
-21-->23
-23-->W
-23-->13
-23-->1T
-23-->14
-23-->24
-23-->25
-23-->1F
-23-->N
-23-->D
-24-->18
-24-->15
-25-->1O
-25-->1N
-25-->I
-26-->1F
-26-->N
-27-->1V
-27-->I
-29-->2A
-29-->2B
-29-->2C
-2A-->W
-2B-->W
-2B-->L
-2B-->24
-2B-->1F
-2C-->W
-2C-->13
-2C-->D
-2D-->X
-2E-->24
-2E-->X
-2E-->W
-2E-->13
-2E-->L
+21-->1D
+22-->24
+22-->W
+22-->13
+22-->1Y
+22-->25
+22-->2B
+22-->2C
+22-->1K
+22-->D
+25-->26
+25-->28
+26-->W
+26-->28
+28-->W
+28-->13
+28-->1Y
+28-->14
+28-->29
+28-->2A
+28-->1K
+28-->N
+28-->D
+29-->18
+29-->15
+2A-->1T
+2A-->1S
+2A-->I
+2B-->1K
+2B-->N
+2C-->20
+2C-->I
+2E-->2F
 2E-->2G
 2E-->2H
-2E-->1F
-2E-->D
-2G-->1B
-2G-->N
-2H-->14
-2H-->1F
-2I-->W
-2I-->D
-2J-->24
+2F-->W
+2G-->W
+2G-->L
+2G-->29
+2G-->1K
+2H-->W
+2H-->13
+2H-->D
+2I-->X
+2J-->29
+2J-->X
+2J-->W
+2J-->13
+2J-->L
+2J-->2L
+2J-->2M
+2J-->1K
 2J-->D
-2K-->1Q
-2K-->1R
-2K-->1X
-2L-->2
-2L-->2N
+2L-->1D
 2L-->N
-2L-->2P
+2M-->14
+2M-->1K
+2N-->W
+2N-->D
+2O-->29
+2O-->D
+2P-->1V
+2P-->1W
+2P-->22
+2Q-->2
+2Q-->2S
+2Q-->N
+2Q-->2U

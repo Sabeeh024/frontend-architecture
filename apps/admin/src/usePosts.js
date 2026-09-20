@@ -7,6 +7,7 @@ import { getPosts } from '@repo/api-client'
 // first one made, only the ones that fit its own problem. What it DOES now
 // share is the data itself (topic 13) — getPosts() is the same function
 // apps/devlog calls, just without React Query wrapped around it here.
+// topic 14 demo: an admin-only change, nothing else should rebuild.
 export function usePosts() {
   const [state, setState] = useState({ status: 'pending', data: undefined, error: undefined })
 

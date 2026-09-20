@@ -10,18 +10,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # turbo needs real history to diff against the base branch for
+          # --filter=...[origin/<base>] below — a shallow clone can't compute
+          # "what changed" (topic 14).
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
       - run: npm ci
 
+      # PRs only run/build what the diff could have broken; a push straight
+      # to the default branch (no PR, no known "before" state to trust) runs
+      # everything. --filter is empty in that case, so every command below
+      # falls back to the ordinary full run.
+      - name: Compute turbo's affected-packages filter
+        id: turbo
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "filter=--filter=...[origin/${{ github.base_ref }}]" >> "$GITHUB_OUTPUT"
+          else
+            echo "filter=" >> "$GITHUB_OUTPUT"
+          fi
+
       # architecture — the boundary rules from topic 07
-      - run: npm run lint
-      - run: npm run depgraph:check
+      - run: npm run lint -- ${{ steps.turbo.outputs.filter }}
+      - run: npm run depgraph:check -- ${{ steps.turbo.outputs.filter }}
 
       # behaviour
-      - run: npm test
+      - run: npm test -- ${{ steps.turbo.outputs.filter }}
 
       # it still has to build
-      - run: npm run build
+      - run: npm run build -- ${{ steps.turbo.outputs.filter }}

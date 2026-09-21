@@ -1,0 +1,6 @@
+.pending-widget {
+  border: 1px solid var(--border, #3a3a3a);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  margin-block-end: 1rem;
+}

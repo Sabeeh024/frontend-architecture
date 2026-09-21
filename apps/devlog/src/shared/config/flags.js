@@ -5,6 +5,7 @@
 const flags = {
   reactions: true, // the 👍 bar on a post
   markdownComments: false, // not built — shows a flag gating unshipped work
+  adminModerationWidget: true, // topic 16 — loads apps/admin's widget at runtime
 }
 
 export const isEnabled = (name) => flags[name] ?? false

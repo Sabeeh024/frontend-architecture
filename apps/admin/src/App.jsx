@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Async, Avatar, Button, ErrorBoundary, ToastList } from '@repo/ui'
 import { setPostStatus } from '@repo/api-client'
 import { useTheme } from '@repo/theme'
+import { useSession } from '@repo/session'
 import { usePosts } from './usePosts'
 
 let seq = 0
@@ -11,6 +12,7 @@ export default function App() {
   const [rows, setRows] = useState(null) // local copy once loaded, so a toggle can update it optimistically
   const [toasts, setToasts] = useState([])
   const { theme, toggle } = useTheme()
+  const user = useSession()
 
   const list = rows ?? posts.data
 
@@ -32,32 +34,47 @@ export default function App() {
             {theme === 'light' ? '🌙' : '☀️'}
           </Button>
         </div>
-        <p className="muted">Moderate posts — the SAME backend apps/devlog reads from (topic 13).</p>
+        {user ? (
+          <p className="muted">Signed in as <strong>{user.name}</strong> — same session as Devlog (topic 18).</p>
+        ) : (
+          <p className="muted">Not signed in.</p>
+        )}
       </header>
 
-      <ErrorBoundary fallback={<p className="muted">Couldn’t load the post list.</p>}>
-        <Async state={posts} empty={<p className="muted">No posts.</p>}>
-          {() => (
-            <ul className="post-rows">
-              {list.map((post) => (
-                <li key={post.id} className="post-row">
-                  <Avatar name={post.author.name} />
-                  <div className="post-row-main">
-                    <strong>{post.title}</strong>
-                    <span className="muted"> — {post.author.name}</span>
-                  </div>
-                  <span className={`badge badge--${post.status}`}>{post.status}</span>
-                  <Button variant="ghost" onClick={() => handleToggle(post)}>
-                    {post.status === 'featured' ? 'Unfeature' : 'Feature'}
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Async>
-      </ErrorBoundary>
+      {!user ? (
+        <p className="card">
+          No shared session found. Log into Devlog first, then reload this page —
+          <br />
+          on the shared origin (<code>/</code> and <code>/admin</code> behind
+          one proxy) the same session shows up here automatically.
+        </p>
+      ) : (
+        <>
+          <ErrorBoundary fallback={<p className="muted">Couldn’t load the post list.</p>}>
+            <Async state={posts} empty={<p className="muted">No posts.</p>}>
+              {() => (
+                <ul className="post-rows">
+                  {list.map((post) => (
+                    <li key={post.id} className="post-row">
+                      <Avatar name={post.author.name} />
+                      <div className="post-row-main">
+                        <strong>{post.title}</strong>
+                        <span className="muted"> — {post.author.name}</span>
+                      </div>
+                      <span className={`badge badge--${post.status}`}>{post.status}</span>
+                      <Button variant="ghost" onClick={() => handleToggle(post)}>
+                        {post.status === 'featured' ? 'Unfeature' : 'Feature'}
+                      </Button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Async>
+          </ErrorBoundary>
 
-      <ToastList toasts={toasts} onDismiss={(id) => setToasts((t) => t.filter((x) => x.id !== id))} />
+          <ToastList toasts={toasts} onDismiss={(id) => setToasts((t) => t.filter((x) => x.id !== id))} />
+        </>
+      )}
     </div>
   )
 }

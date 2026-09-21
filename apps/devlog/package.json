@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@repo/api-client": "*",
+    "@repo/session": "*",
     "@repo/theme": "*",
     "@repo/ui": "*",
     "@tanstack/react-query": "^5.102.8",

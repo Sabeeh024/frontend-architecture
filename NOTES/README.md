@@ -57,7 +57,9 @@ federation boundary?
 | 15 | [Versioning & release](15-versioning.md) | `topic/15-versioning` | Changesets, independent versioning; a real `size` prop on `Button` bumped `@repo/ui` 0.0.0→0.1.0 with a generated changelog. Honest nuance: consumers pin `"*"`, so the version is pure documentation until something depends on a real range. Hit and fixed a real bug: `@changesets/cli@3` silently no-op'd; pinned back to `2.31.1` |
 | 16 | [Micro-frontends](16-micro-frontends.md) | `topic/16-micro-frontends` | admin ships a widget devlog loads at **runtime** via `import()` — zero build-time coupling, own bundled React, `ErrorBoundary` fallback verified both ways. Real dead end kept in the notes: `@originjs/vite-plugin-federation` broke under Vite 8 (unmaintained tooling risk); the plugin-free fallback cost bundle size, not correctness |
 | 17 | [Cross-app cross-cutting concerns](17-cross-app-concerns.md) | `topic/17-cross-app-concerns` | `@repo/theme` gives both apps a working dark-mode toggle from one store. Verified both ways: two tabs of the *same* app sync live via the `storage` event; devlog and admin, on two different origins, don't sync at all. The finding: shared package ≠ shared runtime state — that needs an explicit cross-origin channel this topic didn't build |
+| 18 | [Shared origin](18-shared-origin.md) | `topic/18-shared-origin` | Builds the fix topic 17 only described: a dev-server proxy puts devlog (`/`) and admin (`/admin`) on one origin. `@repo/session` (same shape as `@repo/theme`) then actually syncs — log into devlog, admin shows the same user, no second login. Verified the origin boundary is the real mechanism by hitting admin's own port directly and seeing it fail; theme sync came along for free on the same fix |
 
-Part 2 pauses here — 10 through 17 took the repo from one app to a monorepo
-with independent build-time packages, a runtime-composed micro-frontend, and
-a clear answer for what does and doesn't cross an origin boundary for free.
+Part 2 pauses here — 10 through 18 took the repo from one app to a monorepo
+with independent build-time packages, a runtime-composed micro-frontend, a
+clear answer for what does and doesn't cross an origin boundary for free, and
+the fix that actually closes that gap.

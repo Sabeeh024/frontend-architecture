@@ -1,5 +1,5 @@
 import { useAuth } from '../auth'
-import { useTheme } from '../../shared/theme/ThemeProvider'
+import { useTheme } from '@repo/theme'
 import { Avatar } from '@repo/ui'
 import { useT } from '../../shared/i18n/t'
 

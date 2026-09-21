@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation, useNavigate, useNavigation, useParams } from 'react-router-dom'
 import { useAuth } from '../features/auth'
-import { useTheme } from '../shared/theme/ThemeProvider'
+import { useTheme } from '@repo/theme'
 import { SUPPORTED_LOCALES } from '../shared/i18n/localeStore'
 import { useT } from '../shared/i18n/t'
 import { useLocalizedPath } from '../shared/i18n/useLocalizedPath'

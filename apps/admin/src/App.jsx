@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Async, Avatar, Button, ErrorBoundary, ToastList } from '@repo/ui'
 import { setPostStatus } from '@repo/api-client'
+import { useTheme } from '@repo/theme'
 import { usePosts } from './usePosts'
 
 let seq = 0
@@ -9,6 +10,7 @@ export default function App() {
   const posts = usePosts()
   const [rows, setRows] = useState(null) // local copy once loaded, so a toggle can update it optimistically
   const [toasts, setToasts] = useState([])
+  const { theme, toggle } = useTheme()
 
   const list = rows ?? posts.data
 
@@ -24,7 +26,12 @@ export default function App() {
   return (
     <div className="admin">
       <header className="admin-header">
-        <h1>Devlog Admin</h1>
+        <div className="admin-header-row">
+          <h1>Devlog Admin</h1>
+          <Button variant="ghost" onClick={toggle} aria-label="Toggle theme">
+            {theme === 'light' ? '🌙' : '☀️'}
+          </Button>
+        </div>
         <p className="muted">Moderate posts — the SAME backend apps/devlog reads from (topic 13).</p>
       </header>
 
